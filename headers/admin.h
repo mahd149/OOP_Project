@@ -13,5 +13,6 @@ class Admin: private User
     public:
     bool login(string, string) override;
     void openCSV(const string& filename);
-    void Register(string, string, string);
+    void Register_Admin(string, string, string);
+    void Register_Moderator(string, string, string);
 };
