@@ -15,7 +15,8 @@ class User
     string password;
 
     public :
-    
+    //add constructor (to all the header files please)
+
     void set_username(string );
     void set_password(string );
     void set_email( string);
@@ -24,8 +25,7 @@ class User
     string get_password();
     string get_email();
 
-    virtual bool login(string , string);
-    void Register(string, string, string);
+    virtual bool login(string , string) = 0;    
 
 
 };
