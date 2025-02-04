@@ -43,4 +43,7 @@ int main() {
                 cout << "Invalid option. Please try again.\n";
         }
     }
+
+
+    return 0;
 }
