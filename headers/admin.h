@@ -2,18 +2,22 @@
 
 #pragma once
 
-#include <iostream>
-#include <string>
+// #include <iostream>
+// #include <string>
 #include "user.h"
 
 using namespace std;
 
-class Admin: private User
+class Admin : public User
 {
-    public:
-    //need constructor
+public:
+    Admin(string u_name = "Unknown", string u_email = "", string pass = "");
+   
+
+    // need constructor
     bool login(string, string) override;
-    void openCSV(const string& filename);
+    void openCSV(const string &filename);
     void Register_Admin(string, string, string);
     void Register_Moderator(string, string, string);
+    ~Admin() { }
 };
