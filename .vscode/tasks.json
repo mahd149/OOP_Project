@@ -1,15 +1,51 @@
+// {
+//     "tasks": [
+//         {
+//             "type": "cppbuild",
+//             "label": "C/C++: g++.exe build project",
+//             "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
+//             "args": [
+//                 "-fdiagnostics-color=always",
+//                 "-g",
+//                 "-I", "headers",         // Include headers directory
+//                 "src/*.cpp",             // Compile all .cpp files in src/
+//                 "-o",
+//                 "${workspaceFolder}/main.exe"  // Output executable in the root folder
+//             ],
+//             "options": {
+//                 "cwd": "${workspaceFolder}"
+//             },
+//             "problemMatcher": [
+//                 "$gcc"
+//             ],
+//             "group": {
+//                 "kind": "build",
+//                 "isDefault": true
+//             },
+//             "detail": "Task modified to compile all source files in src/ with headers from headers/."
+//         }
+//     ],
+//     "version": "2.0.0"
+// }
+
+
 {
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: g++.exe build active file",
+            "label": "C/C++: gcc.exe build active file",
             "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${file}",
+                
+               
+                "${workspaceFolder}\\main.cpp",
+                
+                "${workspaceFolder}\\src\\*.cpp",
+                
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${workspaceFolder}\\main.exe",
             ],
             "options": {
                 "cwd": "${fileDirname}"

@@ -8,6 +8,12 @@
 #include <string>
 #include <algorithm>
 
+
+
+
+//separate the implementation in .cpp file please
+
+
 using namespace std;
 
 class Search

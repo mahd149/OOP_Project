@@ -10,12 +10,14 @@ using namespace std;
 class User
 {
     protected:
+    
+
+    public :
     string user_name;
     string user_email;
     string password;
-
-    public :
     //add constructor (to all the header files please)
+    User(string u_name = "Unknown", string u_email = "", string pass = "");
 
     void set_username(string );
     void set_password(string );
@@ -25,7 +27,8 @@ class User
     string get_password();
     string get_email();
 
-    virtual bool login(string , string) = 0;    
+    virtual bool login(string input_email, string input_password) = 0;    
+    virtual ~User() {}
 
 
 };

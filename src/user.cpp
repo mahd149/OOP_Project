@@ -1,31 +1,32 @@
 // user.cpp
+#include "../headers/user.h"
 
-#include "user.h"
-#include <fstream>
-#include <sstream>
 
-bool User::login(string input_username, string input_password) {
-    ifstream file("src/user_data.csv");
-    if (!file.is_open()) {
-        cerr << "Error: Unable to open user data file!" << endl;
-        return false;
-    }
+User::User(string u_name, string u_email, string pass ) :
+user_name(u_name), user_email(u_email), password(pass) { }
 
-    string line, stored_username, stored_email, stored_password;
-    
-    // Read the file line by line
-    while (getline(file, line)) {
-        stringstream ss(line);
-        getline(ss, stored_username, ',');
-        getline(ss, stored_email, ',');
-        getline(ss, stored_password, ',');
+// Implement setters
+void User::set_username(string username) {
+    this->user_name = username;
+}
 
-        if (stored_username == input_username && stored_password == input_password) {
-            file.close();
-            return true;  // Login successful
-        }
-    }
+void User::set_password(string password) {
+    this->password = password;
+}
 
-    file.close();
-    return false;  // Login failed
+void User::set_email(string email) {
+    this->user_email = email;
+}
+
+// Implement getters
+string User::get_username() {
+    return user_name;
+}
+
+string User::get_password() {
+    return password;
+}
+
+string User::get_email() {
+    return user_email;
 }
