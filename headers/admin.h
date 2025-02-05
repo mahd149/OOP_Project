@@ -16,8 +16,12 @@ public:
 
     // need constructor
     bool login(string, string) override;
-    void openCSV(const string &filename);
+    void openCSV_admin_info();
     void Register_Admin(string, string, string);
     void Register_Moderator(string, string, string);
+    void openCSV_donor_info();
+    void openCSV_blood_inventory_info();
+    void openCSV_hospital_info();
+    void openCSV_moderator_info();
     ~Admin() { }
 };
