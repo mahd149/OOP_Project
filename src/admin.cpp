@@ -14,7 +14,8 @@
 
 
 
-void Admin::openCSV(const string& filename) {
+void Admin::openCSV_admin_info() {
+    const string filename = "CSV_Files/admin_info.csv";
     #ifdef _WIN32
         ShellExecute(0, "open", filename.c_str(), 0, 0, SW_SHOWNORMAL);
     #else
