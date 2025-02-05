@@ -36,10 +36,10 @@ public:
         // Convert blood group to uppercase for better matching
         transform(blood_group.begin(), blood_group.end(), blood_group.begin(), ::toupper);
 
-        ifstream file("src/donor_info.csv"); // Update path if necessary
+        ifstream file("CSV_Files/donor_info.csv"); // Update path if necessary
         if (!file.is_open())
         {
-            cout << "Error: Could not open src/donor_info.csv\n";
+            cout << "Error: Could not open CSV_Files/donor_info.csv\n";
             return;
         }
 
