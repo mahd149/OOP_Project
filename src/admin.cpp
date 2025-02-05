@@ -138,3 +138,48 @@ void Admin::Register_Moderator(string input_user_name, string input_email, strin
 
     cout << "User registered successfully!" << endl;
 }
+
+void Admin::openCSV_blood_inventory_info()
+{
+ const string filename = "CSV_Files/blood_inventory.csv";
+    #ifdef _WIN32
+        ShellExecute(0, "open", filename.c_str(), 0, 0, SW_SHOWNORMAL);
+    #else
+        string command = "xdg-open " + filename + " &";
+        system(command.c_str());
+    #endif
+}
+
+
+void Admin::openCSV_donor_info()
+{
+     const string filename = "CSV_Files/donor_info.csv";
+    #ifdef _WIN32
+        ShellExecute(0, "open", filename.c_str(), 0, 0, SW_SHOWNORMAL);
+    #else
+        string command = "xdg-open " + filename + " &";
+        system(command.c_str());
+    #endif
+}
+
+void Admin::openCSV_hospital_info()
+{
+     const string filename = "CSV_Files/hospital_info.csv";
+    #ifdef _WIN32
+        ShellExecute(0, "open", filename.c_str(), 0, 0, SW_SHOWNORMAL);
+    #else
+        string command = "xdg-open " + filename + " &";
+        system(command.c_str());
+    #endif
+}
+
+void Admin::openCSV_moderator_info()
+{
+     const string filename = "CSV_Files/moderator_data.csv";
+    #ifdef _WIN32
+        ShellExecute(0, "open", filename.c_str(), 0, 0, SW_SHOWNORMAL);
+    #else
+        string command = "xdg-open " + filename + " &";
+        system(command.c_str());
+    #endif
+}
