@@ -61,11 +61,17 @@ void Hospital::readBloodInventory()
     cout << "-----------------\n";
     file.close();
 }
+string normalizeBloodGroup(const string &bg) {
+    string result = bg;
+    transform(result.begin(), result.end(), result.begin(), ::toupper);
+    return result;
+}
+
 void Hospital::addBlood(const string &bloodGroup, int amount)
 {
     ifstream file("CSV_Files/blood_inventory.csv");
     if (!file.is_open()) {
-        std::cout << "Error: Could not open CSV_Files/blood_inventory.csv\n";
+        cerr << "Error: Could not open CSV_Files/blood_inventory.csv\n";
         return;
     }
 
@@ -78,13 +84,19 @@ void Hospital::addBlood(const string &bloodGroup, int amount)
     while (getline(file, line)) {
         stringstream ss(line);
         getline(ss, bg, ',');
+
         if (getline(ss, line, ',')) {
-            amt = stoi(line);
+            try {
+                amt = stoi(line); // Ensure valid number conversion
+            } catch (const invalid_argument &e) {
+                cerr << "Error: Invalid number format in CSV file: " << line << endl;
+                amt = 0;
+            }
         } else {
-            amt = 0;
+            amt = 0; // Default value if the field is missing
         }
 
-        if (bg == bloodGroup) {
+        if (normalizeBloodGroup(bg) == normalizeBloodGroup(bloodGroup)) {
             amt += amount;
             found = true;
         }
@@ -94,12 +106,17 @@ void Hospital::addBlood(const string &bloodGroup, int amount)
     file.close();
 
     if (!found) {
-        cout << "Error: Blood group not found.\n";
+        cerr << "Error: Blood group not found.\n";
         return;
     }
 
     // Write back the updated inventory
     ofstream outFile("CSV_Files/blood_inventory.csv");
+    if (!outFile.is_open()) {
+        cerr << "Error: Could not open CSV_Files/blood_inventory.csv for writing.\n";
+        return;
+    }
+
     for (const auto &entry : inventory) {
         outFile << entry.first << "," << entry.second << "\n";
     }
@@ -112,7 +129,7 @@ void Hospital::removeBlood(const string &bloodGroup, int amount)
 {
     ifstream file("CSV_Files/blood_inventory.csv");
     if (!file.is_open()) {
-        cout << "Error: Could not open CSV_Files/blood_inventory.csv\n";
+        cerr << "Error: Could not open CSV_Files/blood_inventory.csv\n";
         return;
     }
 
@@ -125,17 +142,23 @@ void Hospital::removeBlood(const string &bloodGroup, int amount)
     while (getline(file, line)) {
         stringstream ss(line);
         getline(ss, bg, ',');
+
         if (getline(ss, line, ',')) {
-            amt = stoi(line);
+            try {
+                amt = stoi(line); // Handle conversion errors
+            } catch (const invalid_argument &e) {
+                cerr << "Error: Invalid number format in CSV file: " << line << endl;
+                amt = 0;
+            }
         } else {
-            amt = 0;
+            amt = 0; // Default value if missing
         }
 
-        if (bg == bloodGroup) {
+        if (normalizeBloodGroup(bg) == normalizeBloodGroup(bloodGroup)) {
             if (amt < amount) {
-                cout << "Error: Not enough blood bags available. Current: " << amt << "\n";
+                cerr << "Error: Not enough blood bags available. Current: " << amt << "\n";
                 file.close();
-                return;
+                return; // Prevent writing back changes if insufficient blood
             }
             amt -= amount;
             found = true;
@@ -146,12 +169,17 @@ void Hospital::removeBlood(const string &bloodGroup, int amount)
     file.close();
 
     if (!found) {
-        cout << "Error: Blood group not found.\n";
+        cerr << "Error: Blood group not found.\n";
         return;
     }
 
     // Write back the updated inventory
     ofstream outFile("CSV_Files/blood_inventory.csv");
+    if (!outFile.is_open()) {
+        cerr << "Error: Could not open CSV_Files/blood_inventory.csv for writing.\n";
+        return;
+    }
+
     for (const auto &entry : inventory) {
         outFile << entry.first << "," << entry.second << "\n";
     }

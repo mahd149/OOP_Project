@@ -15,7 +15,9 @@ void Moderator::openCSV_donor_info() {
     const string filename = "CSV_Files/donor_info.csv"; // Declare the filename outside the #ifdef block
 
     #ifdef _WIN32
-        ShellExecute(0, "open", filename.c_str(), 0, 0, SW_SHOWNORMAL);
+        char fullPath[MAX_PATH];
+        GetFullPathName(filename.c_str(), MAX_PATH, fullPath, NULL);
+        ShellExecute(nullptr, "open", fullPath, nullptr, nullptr, SW_SHOWNORMAL);
     #else
         string command = "xdg-open " + filename + " &";
         system(command.c_str());
@@ -24,10 +26,12 @@ void Moderator::openCSV_donor_info() {
 
 void Moderator::openCSV_bloodBank_info()
 {
-    const string filename = "CSV_Files/hospital_bank_data.csv"; // Declare the filename outside the #ifdef block
+    const string filename = "CSV_Files/blood_inventory.csv"; // Declare the filename outside the #ifdef block
 
     #ifdef _WIN32
-        ShellExecute(0, "open", filename.c_str(), 0, 0, SW_SHOWNORMAL);
+        char fullPath[MAX_PATH];
+        GetFullPathName(filename.c_str(), MAX_PATH, fullPath, NULL);
+        ShellExecute(nullptr, "open", fullPath, nullptr, nullptr, SW_SHOWNORMAL);
     #else
         string command = "xdg-open " + filename + " &";
         system(command.c_str());
