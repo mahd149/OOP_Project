@@ -14,14 +14,25 @@
 
 
 void Admin::openCSV_admin_info() {
-    const string filename = "CSV_Files/admin_info.csv";
+    const string filename = "CSV_Files/admin_data.csv";
+
     #ifdef _WIN32
-        ShellExecute(0, "open", filename.c_str(), 0, 0, SW_SHOWNORMAL);
+        char fullPath[MAX_PATH];
+        GetFullPathName(filename.c_str(), MAX_PATH, fullPath, NULL);
+        ShellExecute(nullptr, "open", fullPath, nullptr, nullptr, SW_SHOWNORMAL);
     #else
-        string command = "xdg-open " + filename + " &";
+        ifstream testFile(filename);
+        if (!testFile) {
+            cerr << "Error: File does not exist: " << filename << endl;
+            return;
+        }
+        testFile.close();
+        
+        string command = "xdg-open " + filename + " &"; 
         system(command.c_str());
     #endif
 }
+
 
 
 
@@ -91,7 +102,7 @@ void Admin::Register_Admin(string input_user_name, string input_email, string in
     }
 
     // Write new user data to the file
-    outfile << input_user_name << "," << input_email << "," << input_password << endl;
+    outfile << endl << input_user_name << "," << input_email << "," << input_password;
     outfile.close();
 
     cout << "User registered successfully!" << endl;
@@ -132,7 +143,7 @@ void Admin::Register_Moderator(string input_user_name, string input_email, strin
     }
 
     // Write new user data to the file
-    outfile << input_user_name << "," << input_email << "," << input_password << endl;
+    outfile << endl << input_user_name << "," << input_email << "," << input_password;
     outfile.close();
 
     cout << "User registered successfully!" << endl;
@@ -142,7 +153,9 @@ void Admin::openCSV_blood_inventory_info()
 {
  const string filename = "CSV_Files/blood_inventory.csv";
     #ifdef _WIN32
-        ShellExecute(0, "open", filename.c_str(), 0, 0, SW_SHOWNORMAL);
+        char fullPath[MAX_PATH];
+        GetFullPathName(filename.c_str(), MAX_PATH, fullPath, NULL);
+        ShellExecute(nullptr, "open", fullPath, nullptr, nullptr, SW_SHOWNORMAL);
     #else
         string command = "xdg-open " + filename + " &";
         system(command.c_str());
@@ -154,7 +167,9 @@ void Admin::openCSV_donor_info()
 {
      const string filename = "CSV_Files/donor_info.csv";
     #ifdef _WIN32
-        ShellExecute(0, "open", filename.c_str(), 0, 0, SW_SHOWNORMAL);
+        char fullPath[MAX_PATH];
+        GetFullPathName(filename.c_str(), MAX_PATH, fullPath, NULL);
+        ShellExecute(nullptr, "open", fullPath, nullptr, nullptr, SW_SHOWNORMAL);
     #else
         string command = "xdg-open " + filename + " &";
         system(command.c_str());
@@ -165,7 +180,9 @@ void Admin::openCSV_hospital_info()
 {
      const string filename = "CSV_Files/hospital_info.csv";
     #ifdef _WIN32
-        ShellExecute(0, "open", filename.c_str(), 0, 0, SW_SHOWNORMAL);
+        char fullPath[MAX_PATH];
+        GetFullPathName(filename.c_str(), MAX_PATH, fullPath, NULL);
+        ShellExecute(nullptr, "open", fullPath, nullptr, nullptr, SW_SHOWNORMAL);
     #else
         string command = "xdg-open " + filename + " &";
         system(command.c_str());
@@ -176,7 +193,9 @@ void Admin::openCSV_moderator_info()
 {
      const string filename = "CSV_Files/moderator_data.csv";
     #ifdef _WIN32
-        ShellExecute(0, "open", filename.c_str(), 0, 0, SW_SHOWNORMAL);
+        char fullPath[MAX_PATH];
+        GetFullPathName(filename.c_str(), MAX_PATH, fullPath, NULL);
+        ShellExecute(nullptr, "open", fullPath, nullptr, nullptr, SW_SHOWNORMAL);
     #else
         string command = "xdg-open " + filename + " &";
         system(command.c_str());

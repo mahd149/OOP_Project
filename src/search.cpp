@@ -63,8 +63,8 @@ void Search:: searchBlood(){
             {
                 cout << "Name: " << name << "\n";
                 cout << "Blood Group: " << bg << "\n";
-                cout << "Age: " << age << "\n";
-                cout << "ZIP Code: " << area_zip << "\n";
+                //cout << "Age: " << age << "\n";
+                //cout << "ZIP Code: " << area_zip << "\n";
                 cout << "Contact: " << contact << "\n";
                 cout << "----------------------------------------\n";
                 found = true;

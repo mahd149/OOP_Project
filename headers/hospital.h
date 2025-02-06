@@ -14,10 +14,14 @@ using namespace std;
 class Hospital: public User{
     public: 
         bool login(string, string) override;
-        void openCSV_blood_inventory_info();
+        // void openCSV_blood_inventory_info();
         void readBloodInventory();
         void addBlood(const string &bloodGroup, int amount);
         void removeBlood(const string &bloodGroup, int amount);
+
+        string trim(const string &str);
+        void searchBlood();
+        
         ~Hospital(){}
 
 };
