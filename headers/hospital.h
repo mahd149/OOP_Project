@@ -6,6 +6,8 @@
 //search for donors when needed
 #pragma once
 #include "user.h"
+#include "surgical.h"
+#include "nonsurgical.h"
 
 using namespace std;
 
@@ -22,6 +24,8 @@ class Hospital: public User{
         string trim(const string &str);
         void searchBlood();
         
+        void requestBlood(const string &bloodGroup, int amount, bool isSurgical);
+        void processBloodRequest(RequestBlood *request);
         ~Hospital(){}
 
 };

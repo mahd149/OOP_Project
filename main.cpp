@@ -185,7 +185,7 @@ int main()
                 {
                     cout << "1. Read Blood Inventory\n";
                     cout << "2. Add Blood\n";
-                    cout << "3. Remove Blood\n";
+                    cout << "3. Request Blood\n";
                     cout << "4. Search Blood\n";
                     cout << "0. Exit\n";
                     cout << "Enter your choice: ";
@@ -207,11 +207,34 @@ int main()
                     {
                         string bloodGroup;
                         int amount;
+                        int typeChoice;
+                        bool isSurgical;
+    
                         cout << "Enter Blood Group: ";
                         cin >> bloodGroup;
                         cout << "Enter Amount: ";
                         cin >> amount;
-                        h->removeBlood(bloodGroup, amount);
+    
+                        while (true)
+                        {
+                            cout << "Request Type:\n1. Surgical\n2. Non-Surgical\nChoose (1/2): ";
+                            cin >> typeChoice;
+    
+                            if (typeChoice == 1)
+                            {
+                                isSurgical = true;
+                                break;
+                             }
+                            else if (typeChoice == 2)
+                            {
+                                isSurgical = false;
+                                break;
+                            }
+                            else
+                                cout << "Invalid choice! Please enter 1 or 2.\n";
+                            }
+    
+                            h->requestBlood(bloodGroup, amount, isSurgical);
                     }
                     else if (choice == 4)
                         h->searchBlood();
@@ -240,13 +263,17 @@ int main()
 
 /* how to compile the program example
 
-g++ -Iheader -c src/file1.cpp -o file1.o
-g++ -Iheader -c src/file2.cpp -o file2.o
+g++ -Iheader -c src/user.cpp -o user.o
+g++ -Iheader -c src/admin.cpp -o admin.o
+g++ -Iheader -c src/hospital.cpp -o hospital.o
+g++ -Iheader -c src/search.cpp -o search.o
+g++ -Iheader -c src/moderator.cpp -o moderator.o
+g++ -Iheader -c src/requestblood.cpp -o requestblood.o
+g++ -Iheader -c src/surgical.cpp -o surgical.o
+g++ -Iheader -c src/nonsurgical.cpp -o nonsurgical.o
 g++ -c main.cpp -o main.o
 
-g++ file1.o file2.o main.o -o main
-
-
+g++ admin.o moderator.o user.o search.o hospital.o requestblood.o surgical.o nonsurgical.o main.o -o main
 ./main.exe
 
 */
