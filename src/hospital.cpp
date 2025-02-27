@@ -273,3 +273,33 @@ void Hospital:: searchBlood(){
 
         file.close();
     }
+    void Hospital::processBloodRequest(RequestBlood *request) {
+        cout << "\n[Processing Request] Checking availability for " << request->getQuantity() 
+             << " units of " << request->getBloodGroup() << "...\n";
+    
+        request->performTests(); 
+    
+        if (request->approveRequest()) {
+            cout << "[Success] Blood request approved!\n";
+            removeBlood(request->getBloodGroup(), request->getQuantity());
+        } else {
+            cout << "[Failed] Blood request **not approved** due to test failure.\n";
+        }
+    }
+    void Hospital::requestBlood(const string &bloodGroup, int amount, bool isSurgical) {
+        cout << "\n[Blood Request] Requesting " << amount << " units of " << bloodGroup;
+        cout << (isSurgical ? " for **Surgical use**.\n" : " for **Non-Surgical use**.\n");
+    
+        RequestBlood *request;
+        
+        if (isSurgical) {
+            request = new Surgical(bloodGroup, amount, "Hospital_Name"); 
+        } else {
+            request = new NonSurgical(bloodGroup, amount, "Hospital_Name"); 
+        }
+    
+        processBloodRequest(request);
+        
+        delete request;  
+    }
+    
