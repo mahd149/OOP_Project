@@ -156,21 +156,19 @@ void Hospital::addBlood(const string &bloodGroup, int amount)
     cout << "Successfully added " << amount << " bags to " << bloodGroup << " blood group.\n";
 }
 
-void Hospital::checkExpiry(int minutes)
+unordered_map<string, int> Hospital::checkExpiry(int minutes)
 {
     ifstream detailFile("CSV_Files/detailed_blood_inventory.csv");
     if (!detailFile.is_open())
     {
         cerr << "Error: Could not open CSV_Files/detailed_blood_inventory.csv\n";
-        return;
+        return {};
     }
 
     unordered_map<string, int> expiredBloodCount;
-    vector<pair<string, time_t>> remainingRecords; // Stores non-expired records
     string line, bloodGroup;
     time_t timestamp;
     time_t currentTime = time(nullptr);
-    time_t expiryThreshold = currentTime - (minutes * 60); // Convert minutes to seconds
 
     while (getline(detailFile, line))
     {
@@ -178,99 +176,29 @@ void Hospital::checkExpiry(int minutes)
         getline(ss, bloodGroup, ',');
         ss >> timestamp;
 
-        if (timestamp <= expiryThreshold)
+        if (timestamp + minutes * 60 < currentTime)
         {
             expiredBloodCount[normalizeBloodGroup(bloodGroup)]++;
-        }
-        else
-        {
-            remainingRecords.push_back({bloodGroup, timestamp}); // Keep non-expired records
         }
     }
     detailFile.close();
 
     if (expiredBloodCount.empty())
     {
-        cout << "No blood units expired before " << minutes << " minutes.\n";
-        return;
-    }
-    for (const auto &entry : expiredBloodCount)
-    {
-        cout << "Blood Group: " << entry.first << " | Amount: " << entry.second << " bags\n";
-    }
-
-    // Prompt for deletion
-    char choice;
-    cout << "Do you want to delete these expired records? (y/n): ";
-    cin >> choice;
-
-    if (choice == 'y' || choice == 'Y')
-    {
-        // Update detailed_blood_inventory.csv
-        ofstream updatedDetailFile("CSV_Files/detailed_blood_inventory.csv");
-        if (!updatedDetailFile.is_open())
-        {
-            cerr << "Error: Could not open CSV_Files/detailed_blood_inventory.csv for writing.\n";
-            return;
-        }
-
-        for (const auto &record : remainingRecords)
-        {
-            updatedDetailFile << record.first << "," << record.second << "\n";
-        }
-        updatedDetailFile.close();
-
-        // Update blood_inventory.csv
-        ifstream inventoryFile("CSV_Files/blood_inventory.csv");
-        if (!inventoryFile.is_open())
-        {
-            cerr << "Error: Could not open CSV_Files/blood_inventory.csv\n";
-            return;
-        }
-
-        unordered_map<string, int> updatedBloodInventory;
-        while (getline(inventoryFile, line))
-        {
-            stringstream ss(line);
-            getline(ss, bloodGroup, ',');
-            int amount;
-            ss >> amount;
-
-            string normBloodGroup = normalizeBloodGroup(bloodGroup);
-
-            // Reduce amount of expired blood bags
-            if (expiredBloodCount.find(normBloodGroup) != expiredBloodCount.end())
-            {
-                amount -= expiredBloodCount[normBloodGroup];
-                if (amount < 0)
-                    amount = 0; // Ensure non-negative value
-            }
-
-            updatedBloodInventory[normBloodGroup] = amount;
-        }
-        inventoryFile.close();
-
-        // Write updated blood inventory back
-        ofstream updatedInventoryFile("CSV_Files/blood_inventory.csv");
-        if (!updatedInventoryFile.is_open())
-        {
-            cerr << "Error: Could not open CSV_Files/blood_inventory.csv for writing.\n";
-            return;
-        }
-
-        for (const auto &entry : updatedBloodInventory)
-        {
-            updatedInventoryFile << entry.first << "," << entry.second << "\n";
-        }
-        updatedInventoryFile.close();
-
-        cout << "Expired records successfully deleted.\n";
+        cout << "No blood units expired within " << minutes << " minutes.\n";
     }
     else
     {
-        cout << "No records were deleted.\n";
+        cout << "Expired blood records:\n";
+        for (const auto &entry : expiredBloodCount)
+        {
+            cout << "Blood Group: " << entry.first << " | Amount: " << entry.second << " bags\n";
+        }
     }
+
+    return expiredBloodCount;
 }
+
 
 void Hospital::removeBlood(const string &bloodGroup, int amount)
 {

@@ -7,7 +7,6 @@
 #include "headers/users.h"
 #include <unordered_map>
 
-
 using namespace std;
 
 int main()
@@ -54,7 +53,7 @@ int main()
                 while (true)
                 {
                     cout << "1. Open Files\n";
-                    
+
                     cout << "2. Register Admin\n";
                     cout << "3. Register Moderator\n";
                     cout << "0. Exit\n";
@@ -63,7 +62,7 @@ int main()
 
                     if (choice == 1)
                     {
-                        while(true)
+                        while (true)
                         {
                             int x;
                             cout << "1. Open Admin info File\n";
@@ -75,7 +74,7 @@ int main()
                             cout << "Enter your choice: ";
                             cin >> x;
 
-                            if(x == 1)
+                            if (x == 1)
                                 a->openCSV_admin_info();
                             else if (x == 2)
                                 a->openCSV_moderator_info();
@@ -85,12 +84,13 @@ int main()
                                 a->openCSV_blood_inventory_info();
                             else if (x == 5)
                                 a->openCSV_hospital_info();
-                            else if(x == 0)
+                            else if (x == 0)
                                 break;
-                            else cout<<"Invalid choice!\n";
+                            else
+                                cout << "Invalid choice!\n";
                         }
                     }
-                    
+
                     else if (choice == 2)
                     {
                         string name, email, pass;
@@ -209,32 +209,54 @@ int main()
                     else if (choice == 3)
                     {
                         int minutes;
-                        cout << "Enter timespan(in minutes): ";
-                        cin>>minutes;
-                        h->checkExpiry(minutes);
+                        cout << "Enter timespan (in minutes): ";
+                        cin >> minutes;
+
+                        unordered_map<string, int> expiredBlood = h->checkExpiry(minutes);
+
+                        if (!expiredBlood.empty())
+                        {
+                            char confirm;
+                            cout << "Do you want to delete these expired records? (y/n): ";
+                            cin >> confirm;
+
+                            if (confirm == 'y' || confirm == 'Y')
+                            {
+                                for (const auto &entry : expiredBlood)
+                                {
+                                    h->removeBlood(entry.first, entry.second);
+                                }
+                                cout << "Expired records successfully deleted.\n";
+                            }
+                            else
+                            {
+                                cout << "No records were deleted.\n";
+                            }
+                        }
                     }
+
                     else if (choice == 4)
                     {
                         string bloodGroup;
                         int amount;
                         int typeChoice;
                         bool isSurgical;
-    
+
                         cout << "Enter Blood Group: ";
                         cin >> bloodGroup;
                         cout << "Enter Amount: ";
                         cin >> amount;
-    
+
                         while (true)
                         {
                             cout << "Request Type:\n1. Surgical\n2. Non-Surgical\nChoose (1/2): ";
                             cin >> typeChoice;
-    
+
                             if (typeChoice == 1)
                             {
                                 isSurgical = true;
                                 break;
-                             }
+                            }
                             else if (typeChoice == 2)
                             {
                                 isSurgical = false;
@@ -242,9 +264,9 @@ int main()
                             }
                             else
                                 cout << "Invalid choice! Please enter 1 or 2.\n";
-                            }
-    
-                            h->requestBlood(bloodGroup, amount, isSurgical);
+                        }
+
+                        h->requestBlood(bloodGroup, amount, isSurgical);
                     }
                     else if (choice == 5)
                         h->searchBlood();

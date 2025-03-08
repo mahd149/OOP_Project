@@ -8,6 +8,7 @@
 #include "user.h"
 #include "surgical.h"
 #include "nonsurgical.h"
+#include <unordered_map>
 
 using namespace std;
 
@@ -20,7 +21,8 @@ class Hospital: public User{
         void readBloodInventory();
         void addBlood(const string &bloodGroup, int amount);
         void removeBlood(const string &bloodGroup, int amount);
-        void checkExpiry(int minutes);
+        unordered_map<string, int> checkExpiry(int minutes);
+
 
         string trim(const string &str);
         void searchBlood();
