@@ -20,6 +20,7 @@ class Hospital: public User{
         void readBloodInventory();
         void addBlood(const string &bloodGroup, int amount);
         void removeBlood(const string &bloodGroup, int amount);
+        void checkExpiry(int minutes);
 
         string trim(const string &str);
         void searchBlood();

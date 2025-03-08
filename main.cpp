@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <limits>
 #include "headers/users.h"
+#include <unordered_map>
+
 
 using namespace std;
 
@@ -185,8 +187,9 @@ int main()
                 {
                     cout << "1. Read Blood Inventory\n";
                     cout << "2. Add Blood\n";
-                    cout << "3. Request Blood\n";
-                    cout << "4. Search Blood\n";
+                    cout << "3. Check Expiry\n";
+                    cout << "4. Request Blood\n";
+                    cout << "5. Search Blood\n";
                     cout << "0. Exit\n";
                     cout << "Enter your choice: ";
                     cin >> choice;
@@ -204,6 +207,13 @@ int main()
                         h->addBlood(bloodGroup, amount);
                     }
                     else if (choice == 3)
+                    {
+                        int minutes;
+                        cout << "Enter timespan(in minutes): ";
+                        cin>>minutes;
+                        h->checkExpiry(minutes);
+                    }
+                    else if (choice == 4)
                     {
                         string bloodGroup;
                         int amount;
@@ -236,7 +246,7 @@ int main()
     
                             h->requestBlood(bloodGroup, amount, isSurgical);
                     }
-                    else if (choice == 4)
+                    else if (choice == 5)
                         h->searchBlood();
                     else if (choice == 0)
                         break;
@@ -280,6 +290,7 @@ g++ admin.o moderator.o user.o search.o hospital.o requestblood.o surgical.o non
 
 /*
 g++ main.cpp src/*.cpp -Iheaders -Wall -Wextra -o Blood_Bank.exe
+./Blood_Bank.exe
 
 ./output.exe
 */
