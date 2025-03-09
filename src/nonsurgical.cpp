@@ -2,7 +2,7 @@
 #include <iostream>
 
 NonSurgical::NonSurgical(string bGroup, int qty, string hName)
-    : RequestBlood(bGroup, qty, hName) {}
+    : Bloodtest(bGroup, qty, hName) {}
 
 void NonSurgical::request() {
     cout << "Non-Surgical blood request placed for " << quantity 
@@ -14,7 +14,7 @@ void NonSurgical::performTests() {
     cout << "Performing **basic compatibility and infection tests** for non-surgical request...\n";
 
     bool bloodTyping = rand() % 10;       
-    bool infectionScreening = rand() % 10; 
+    bool iron = rand() % 10; 
     bool hemoglobinTest = rand() % 10;    
 
     if (bloodTyping) 
@@ -22,17 +22,17 @@ void NonSurgical::performTests() {
     else 
         cout << "Blood Typing (ABO & Rh): Failed" << endl;
 
-    if (infectionScreening) 
-        cout << "Infection Screening: Passed" << endl;
+    if (iron) 
+        cout << "Ferritin Test: Passed" << endl;
     else 
-        cout << "Infection Screening: Failed" << endl;
+        cout << "Ferritin Test: Failed" << endl;
 
     if (hemoglobinTest) 
         cout << "Hemoglobin Test: Passed" << endl;
     else 
         cout << "Hemoglobin Test: Failed" << endl;
 
-    if (bloodTyping && infectionScreening && hemoglobinTest) {
+    if (bloodTyping && iron && hemoglobinTest) {
         cout << "**All tests passed! Blood is safe for non-surgical use.**\n";
         isApproved=true;
     } else {

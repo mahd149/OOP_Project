@@ -1,9 +1,11 @@
 #pragma once
 #include <string>
+#include<ctime>
+#include<iostream>
 
 using namespace std;
 
-class RequestBlood {
+class Bloodtest {
 protected:
     string bloodGroup;
     int quantity;
@@ -11,14 +13,15 @@ protected:
     bool isApproved;  
 
 public:
-    RequestBlood(string bGroup, int qty, string hName);
+    Bloodtest(string bGroup, int qty, string hName);
     virtual void request() = 0; 
     virtual void performTests() = 0;
-    bool approveRequest(); 
+    bool approveRequest();
+    bool initial_test(); 
 
     string getBloodGroup();
     int getQuantity();
     string getHospitalName();
 
-    virtual ~RequestBlood() {}
+    virtual ~Bloodtest() {}
 };
