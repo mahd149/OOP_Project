@@ -31,7 +31,7 @@ class Hospital: public User{
         void searchBlood();
         
         void requestBlood(const string &bloodGroup, int amount, bool isSurgical);
-        void processBloodRequest(RequestBlood *request);
+        void processBloodRequest(Bloodtest *request);
         ~Hospital(){}
 
 };

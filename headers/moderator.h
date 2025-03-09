@@ -17,8 +17,7 @@ class Moderator: public User
     bool login(string, string) override;
     void openCSV_donor_info();
     void openCSV_bloodBank_info();
-    //add functions for opening othercsv files
-    //excluding admin files and hospital bank data
+
 
     ~Moderator() {}
     

@@ -305,12 +305,13 @@ g++ -Iheader -c src/admin.cpp -o admin.o
 g++ -Iheader -c src/hospital.cpp -o hospital.o
 g++ -Iheader -c src/search.cpp -o search.o
 g++ -Iheader -c src/moderator.cpp -o moderator.o
-g++ -Iheader -c src/requestblood.cpp -o requestblood.o
+g++ -Iheader -c src/bloodtest.cpp -o bloodtest.o
 g++ -Iheader -c src/surgical.cpp -o surgical.o
 g++ -Iheader -c src/nonsurgical.cpp -o nonsurgical.o
+g++ -Iheader -c src/donor.cpp -o donor.o
 g++ -c main.cpp -o main.o
 
-g++ admin.o moderator.o user.o search.o hospital.o requestblood.o surgical.o nonsurgical.o main.o -o main
+g++ admin.o moderator.o user.o search.o hospital.o bloodtest.o surgical.o nonsurgical.o donor.o main.o -o main
 ./main.exe
 
 g++ main.cpp src/*.cpp -Iheaders -Wall -Wextra -o Blood_Bank.exe

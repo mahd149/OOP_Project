@@ -41,8 +41,9 @@ void Search:: searchBlood(){
         while (getline(file, line))
         {
             stringstream ss(line);
-            string name, bg, age, area_zip, contact;
+            string id,name, bg, age, area_zip, contact;
 
+            getline(ss, id, ',');
             getline(ss, name, ',');
             getline(ss, bg, ',');
             getline(ss, age, ',');
@@ -50,6 +51,7 @@ void Search:: searchBlood(){
             getline(ss, contact, ',');
 
             // Trim spaces from fields
+            id = trim(id);
             name = trim(name);
             bg = trim(bg);
             age = trim(age);

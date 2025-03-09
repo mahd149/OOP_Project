@@ -2,7 +2,7 @@
 #include <iostream>
 
 Surgical::Surgical(string bGroup, int qty, string hName)
-    : RequestBlood(bGroup, qty, hName) {}
+    : Bloodtest(bGroup, qty, hName) {}
 
 void Surgical::request() {
     cout << "Surgical blood request placed for " << quantity 
@@ -15,7 +15,7 @@ void Surgical::performTests() {
 
     bool bloodTyping = rand() % 10;       
     bool crossmatch = rand() % 10;        
-    bool infectionScreening = rand() % 10; 
+    bool platelet = rand() % 10; 
     bool coagulationTest = rand() % 10;   
     if (bloodTyping) 
         cout << "Blood Typing (ABO & Rh): Passed" << endl;
@@ -27,10 +27,10 @@ void Surgical::performTests() {
     else 
         cout << "Crossmatching: Failed" << endl;
 
-    if (infectionScreening) 
-        cout << "Infection Screening: Passed" << endl;
+    if (platelet) 
+        cout << "Platelet Count: Passed" << endl;
     else 
-        cout << "Infection Screening: Failed" << endl;
+        cout << "Platelet Count: Failed" << endl;
 
     if (coagulationTest) 
         cout << "Coagulation Test: Passed" << endl;
@@ -38,7 +38,7 @@ void Surgical::performTests() {
         cout << "Coagulation Test: Failed" << endl;
 
 
-    if (bloodTyping && crossmatch && infectionScreening && coagulationTest) {
+    if (bloodTyping && crossmatch && platelet && coagulationTest) {
         cout << "**All tests passed! Blood can be used for surgery.**\n";
         isApproved=true;
     } else {

@@ -7,6 +7,7 @@
 #include "user.h"
 #include "search.h"
 #include "moderator.h"
-#include "requestblood.h"
+#include "bloodtest.h"
 #include "surgical.h"
 #include "nonsurgical.h"
+#include "donor.h"

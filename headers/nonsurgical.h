@@ -1,7 +1,7 @@
 #pragma once
-#include "requestblood.h"
+#include "bloodtest.h"
 
-class NonSurgical : public RequestBlood {
+class NonSurgical : public Bloodtest {
 public:
     NonSurgical(string bGroup, int qty, string hName);
     void request() override;
