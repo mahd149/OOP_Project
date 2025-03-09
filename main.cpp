@@ -190,6 +190,7 @@ int main()
                     cout << "3. Check Expiry\n";
                     cout << "4. Request Blood\n";
                     cout << "5. Search Blood\n";
+                    cout << "6. Add Donor\n";
                     cout << "0. Exit\n";
                     cout << "Enter your choice: ";
                     cin >> choice;
@@ -198,13 +199,10 @@ int main()
                         h->readBloodInventory();
                     else if (choice == 2)
                     {
-                        string bloodGroup;
-                        int amount;
-                        cout << "Enter Blood Group: ";
-                        cin >> bloodGroup;
-                        cout << "Enter Amount: ";
-                        cin >> amount;
-                        h->addBlood(bloodGroup, amount);
+                        int donorId;
+                        cout << "Enter Donor ID: ";
+                        cin >> donorId;
+                        h->addBlood(donorId);
                     }
                     else if (choice == 3)
                     {
@@ -270,6 +268,13 @@ int main()
                     }
                     else if (choice == 5)
                         h->searchBlood();
+                    else if (choice == 6)
+                    {
+                        Donor newDonor;
+                        newDonor.inputDonor();
+                        h->addDonor(newDonor);
+                    }
+
                     else if (choice == 0)
                         break;
                     else
@@ -308,9 +313,6 @@ g++ -c main.cpp -o main.o
 g++ admin.o moderator.o user.o search.o hospital.o requestblood.o surgical.o nonsurgical.o main.o -o main
 ./main.exe
 
-*/
-
-/*
 g++ main.cpp src/*.cpp -Iheaders -Wall -Wextra -o Blood_Bank.exe
 ./Blood_Bank.exe
 

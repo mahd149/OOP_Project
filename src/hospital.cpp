@@ -71,8 +71,79 @@ string normalizeBloodGroup(const string &bg)
     return result;
 }
 
-void Hospital::addBlood(const string &bloodGroup, int amount)
+void Hospital::addDonor(Donor &donor)
 {
+    // Save the donor information to the donor_info.csv file
+    string filename = "CSV_Files/donor_info.csv";
+    donor.saveToFile(filename);
+}
+
+void Hospital::addBlood(int donorId)
+{
+    ifstream donorFile("CSV_Files/donor_info.csv");
+    if (!donorFile.is_open())
+    {
+        cerr << "Error: Could not open CSV_Files/donor_info.csv\n";
+        return;
+    }
+
+    string line;
+    bool donorFound = false;
+    string donorName, bloodGroup;
+
+    // Search for the donor by ID in the donor_info.csv
+    while (getline(donorFile, line))
+    {
+        stringstream ss(line);
+        string temp;
+        int currentId;
+
+        getline(ss, temp, ','); // Read the ID
+        currentId = stoi(temp); // Convert to integer
+
+        // Check if it matches the given donor ID
+        if (currentId == donorId)
+        {
+            donorFound = true;
+            getline(ss, donorName, ',');  // Read the donor's name
+            getline(ss, bloodGroup, ','); // Read the blood group
+            break;
+        }
+    }
+
+    donorFile.close();
+
+    // If donor is not found, ask if the user wants to create a new donor
+    if (!donorFound)
+    {
+        char choice;
+        cout << "Donor with ID " << donorId << " not found. Do you want to create a new donor? (y/n): ";
+        cin >> choice;
+
+        if (choice == 'y' || choice == 'Y')
+        {
+            Donor newDonor;
+            newDonor.inputDonor();  // Get input from the user for new donor
+            addDonor(newDonor);     // Add the new donor to the system
+
+            donorFound = true;
+            donorName = newDonor.getName();  // Assuming the Donor class has a getName() function
+            bloodGroup = newDonor.getBloodGroup();  // Assuming the Donor class has a getBloodGroup() function
+        }
+        else
+        {
+            cout << "No new donor created. Exiting...\n";
+            return;
+        }
+    }
+
+    // Prompt user for the number of bags needed
+    int amount;
+    cout << "Donor " << donorName << " (Blood Group: " << bloodGroup << ") found.\n";
+    cout << "Enter number of bags of blood to take: ";
+    cin >> amount;
+
+    // Continue with the existing blood inventory update logic
     ifstream file("CSV_Files/blood_inventory.csv");
     if (!file.is_open())
     {
@@ -81,9 +152,9 @@ void Hospital::addBlood(const string &bloodGroup, int amount)
     }
 
     vector<pair<string, int>> inventory;
-    string line, bg;
-    int amt;
     bool found = false;
+    string bg;
+    int amt;
 
     // Read the CSV file into a vector
     while (getline(file, line))
@@ -156,6 +227,7 @@ void Hospital::addBlood(const string &bloodGroup, int amount)
     cout << "Successfully added " << amount << " bags to " << bloodGroup << " blood group.\n";
 }
 
+
 unordered_map<string, int> Hospital::checkExpiry(int minutes)
 {
     ifstream detailFile("CSV_Files/detailed_blood_inventory.csv");
@@ -198,7 +270,6 @@ unordered_map<string, int> Hospital::checkExpiry(int minutes)
 
     return expiredBloodCount;
 }
-
 
 void Hospital::removeBlood(const string &bloodGroup, int amount)
 {

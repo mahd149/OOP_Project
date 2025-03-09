@@ -8,6 +8,7 @@
 #include "user.h"
 #include "surgical.h"
 #include "nonsurgical.h"
+#include "donor.h"
 #include <unordered_map>
 
 using namespace std;
@@ -19,7 +20,9 @@ class Hospital: public User{
         bool login(string, string) override;
         // void openCSV_blood_inventory_info();
         void readBloodInventory();
-        void addBlood(const string &bloodGroup, int amount);
+        void addDonor(Donor &newDonor);
+        
+        void addBlood(int donorId);
         void removeBlood(const string &bloodGroup, int amount);
         unordered_map<string, int> checkExpiry(int minutes);
 
