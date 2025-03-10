@@ -207,7 +207,7 @@ int main()
                     else if (choice == 3)
                     {
                         int minutes;
-                        cout << "Enter timespan (in minutes): ";
+                        cout << "Enter expiry time limit (in minutes): ";
                         cin >> minutes;
 
                         unordered_map<string, int> expiredBlood = h->checkExpiry(minutes);
