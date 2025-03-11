@@ -19,6 +19,7 @@ Donor::Donor()
     zip = 0;
     contact = "";
 }
+Donor::Donor(int a, string n, string s, int b, int z,string c):id(a),name(s),bloodGroup(s),age(b),zip(z),contact(c){}
 
 string normalizeBloodGroup2(string bg)
 {
@@ -188,4 +189,7 @@ int Donor::getAge() const
 string Donor::getContact() const
 {
     return contact;
+}
+int Donor::getId() const{
+    return id;
 }

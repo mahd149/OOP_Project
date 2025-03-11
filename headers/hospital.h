@@ -10,6 +10,7 @@
 #include "nonsurgical.h"
 #include "donor.h"
 #include <unordered_map>
+#include <vector>
 
 using namespace std;
 
@@ -32,6 +33,8 @@ class Hospital: public User{
         
         void requestBlood(const string &bloodGroup, int amount, bool isSurgical);
         void processBloodRequest(Bloodtest *request);
+        void write_to_inventory(int amount,string bloodgroup);
+        void write_details(int amount,Donor d,time_t currentTime,vector<string>donorRecords);
         ~Hospital(){}
 
 };
