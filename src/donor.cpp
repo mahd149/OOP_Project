@@ -1,10 +1,12 @@
 #include "../headers/donor.h"
+#include "../headers/hospital.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <limits>  // For numeric limits (e.g., std::numeric_limits)
-#include <cctype>  // For isdigit() function
+#include <limits>
+#include <cctype>
+#include <algorithm>
 
 using namespace std;
 
@@ -18,93 +20,119 @@ Donor::Donor()
     contact = "";
 }
 
+string normalizeBloodGroup2(string bg)
+{
+    transform(bg.begin(), bg.end(), bg.begin(), ::toupper);
+    if (bg == "A+" || bg == "A-" || bg == "B+" || bg == "B-" ||
+        bg == "AB+" || bg == "AB-" || bg == "O+" || bg == "O-")
+    {
+        return bg;
+    }
+    return "";
+}
+
 void Donor::inputDonor()
 {
     cout << "Enter Name: ";
-    cin.ignore();  // Ignore any leftover characters from previous inputs
+    cin.ignore();
     getline(cin, name);
-    
-    cout << "Enter Blood Group: ";
-    cin >> bloodGroup;
-    
-    // Validate age input: Ensure it's a valid positive integer
-    cout << "Enter Age: ";
-    while (true) {
+
+    while (true)
+    {
+        cout << "Enter Blood Group: ";
+        cin >> bloodGroup;
+        bloodGroup = normalizeBloodGroup2(bloodGroup);
+        if (!bloodGroup.empty())
+            break;
+        cout << "Invalid blood group entered. Please enter a valid blood group (A+, A-, B+, B-, AB+, AB-, O+, O-).\n";
+    }
+
+    while (true)
+    {
+        cout << "Enter Age (18-150): ";
         string ageInput;
         cin >> ageInput;
-        
-        if (isValidInteger(ageInput)) {
+        if (isValidInteger(ageInput))
+        {
             age = stoi(ageInput);
-            if (age > 0) break;  // Ensure age is positive
+            if (age >= 18 && age <= 150)
+                break;
         }
-        
-        cout << "Invalid age. Please enter a valid positive number: ";
-        cin.clear();  // Clears error flag
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Ignores the rest of the input
+        cout << "Invalid age. Please enter a valid number between 18 and 150.\n";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
-    
-    // Validate zip code input: Ensure it's a valid positive integer
-    cout << "Enter Zip Code: ";
-    while (true) {
+
+    while (true)
+    {
+        cout << "Enter Zip Code (1-9999): ";
         string zipInput;
         cin >> zipInput;
-        
-        if (isValidInteger(zipInput)) {
+        if (isValidInteger(zipInput))
+        {
             zip = stoi(zipInput);
-            if (zip > 0) break;  // Ensure zip is positive
+            if (zip >= 1 && zip <= 9999)
+                break;
         }
-        
-        cout << "Invalid zip code. Please enter a valid positive number: ";
-        cin.clear();  // Clears error flag
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Ignores the rest of the input
+        cout << "Invalid zip code. Please enter a valid number between 1 and 9999.\n";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
-    
-    cout << "Enter Contact: ";
-    cin >> contact;
+
+    while (true)
+    {
+        cout << "Enter Contact Number (11-digit integer): ";
+        cin >> contact;
+        if (isValidInteger(contact) && contact.length() == 11)
+            break;
+        cout << "Invalid contact number. Please enter exactly 11 digits.\n";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
 }
 
 bool Donor::isValidInteger(const string &str)
 {
-    for (char c : str) {
-        if (!isdigit(c)) return false;  // Return false if any character is not a digit
+    for (char c : str)
+    {
+        if (!isdigit(c))
+            return false;
     }
-    return true;  // Return true if all characters are digits
+    return !str.empty();
 }
 
 void Donor::saveToFile(const string &filename)
 {
     ifstream file(filename);
     string line;
-    int lastId = 0;  // Default to 0 if no file exists or is empty
+    int lastId = 0;
     bool exists = false;
 
-    // Check if the file exists and find the last id
     if (file.is_open())
     {
         while (getline(file, line))
         {
             stringstream ss(line);
-            string temp;
+            string temp, donorName, donorBloodGroup, donorAge, donorZip, donorContact;
             int currentId;
 
-            // Read the id from the line
             getline(ss, temp, ',');
-            currentId = stoi(temp); // Convert the id part to an integer
-
-            // Update lastId to the most recent one
+            try
+            {
+                currentId = stoi(temp);
+            }
+            catch (...)
+            {
+                continue;
+            }
             lastId = currentId;
 
-            // Check if the donor already exists by comparing each field
-            stringstream donorData(line);
-            string donorName, donorBloodGroup, donorAge, donorZip, donorContact;
-            getline(donorData, temp, ','); // Skip the ID
-            getline(donorData, donorName, ',');
-            getline(donorData, donorBloodGroup, ',');
-            getline(donorData, donorAge, ',');
-            getline(donorData, donorZip, ',');
-            getline(donorData, donorContact);
+            getline(ss, donorName, ',');
+            getline(ss, donorBloodGroup, ',');
+            getline(ss, donorAge, ',');
+            getline(ss, donorZip, ',');
+            getline(ss, donorContact);
 
-            // Check if the donor exists in the file by comparing each field
             if (donorName == name && donorBloodGroup == bloodGroup &&
                 donorAge == to_string(age) && donorZip == to_string(zip) && donorContact == contact)
             {
@@ -115,15 +143,13 @@ void Donor::saveToFile(const string &filename)
         file.close();
     }
 
-    // If the donor doesn't exist, increment lastId and append to the file
     if (exists)
     {
         cout << "Donor already exists in the database. Not adding again.\n";
     }
     else
     {
-        id = lastId + 1;  // Increment lastId for the new donor
-
+        id = lastId + 1;
         ofstream outFile(filename, ios::app);
         if (outFile.is_open())
         {
@@ -139,14 +165,27 @@ void Donor::saveToFile(const string &filename)
     }
 }
 
-// Getter for name
 string Donor::getName() const
 {
     return name;
 }
 
-// Getter for blood group
 string Donor::getBloodGroup() const
 {
     return bloodGroup;
+}
+
+int Donor::getZip() const
+{
+    return zip;
+}
+
+int Donor::getAge() const
+{
+    return age;
+}
+
+string Donor::getContact() const
+{
+    return contact;
 }

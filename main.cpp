@@ -6,6 +6,7 @@
 #include <limits>
 #include "headers/users.h"
 #include <unordered_map>
+#include <set>
 
 using namespace std;
 
@@ -200,7 +201,7 @@ int main()
                     else if (choice == 2)
                     {
                         int donorId;
-                        cout << "Enter Donor ID: ";
+                        cout << "Enter Donor ID (Enter -1 for creating new ID): ";
                         cin >> donorId;
                         h->addBlood(donorId);
                     }
