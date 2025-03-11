@@ -32,6 +32,12 @@ public:
 
     // Getter for blood group
     string getBloodGroup() const;
+
+    int getAge() const;
+
+    int getZip() const;
+
+    string getContact() const; 
 };
 
 #endif // DONOR_H
