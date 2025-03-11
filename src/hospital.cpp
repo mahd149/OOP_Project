@@ -82,7 +82,73 @@ void Hospital::addDonor(Donor &donor)
     string filename = "CSV_Files/donor_info.csv";
     donor.saveToFile(filename);
 }
+void Hospital::write_to_inventory(int amount, string  bloodGroup){
+    ifstream file("CSV_Files/blood_inventory.csv");
+    if (!file.is_open())
+    {
+        cerr << "Error: Could not open CSV_Files/blood_inventory.csv\n";
+        return;
+    }
 
+    vector<pair<string, int>> inventory;
+    bool found = false;
+    string bg;
+    string line;
+    int amt;
+    while (getline(file, line))
+    {
+        stringstream ss(line);
+        getline(ss, bg, ',');
+        getline(ss, line, ',');
+        amt = stoi(line);
+        if (normalizeBloodGroup(bg) == bloodGroup)
+        {
+            amt += amount;
+            found = true;
+        }
+        inventory.push_back({bg, amt});
+    }
+    file.close();
+
+    if (!found)
+    {
+        cerr << "Error: Blood group not found in inventory.\n";
+        return;
+    }
+
+    ofstream outFile("CSV_Files/blood_inventory.csv");
+    for (const auto &entry : inventory)
+        outFile << entry.first << "," << entry.second << "\n";
+    outFile.close();
+
+    
+}
+void  Hospital::write_details(int amount,Donor d,time_t currentTime,vector<string>donorRecords){
+    ofstream detailFile("CSV_Files/detailed_blood_inventory.csv", ios::app);
+    for (int i = 0; i < amount; i++)
+        detailFile << d.getBloodGroup() << "," << currentTime + i << "\n";
+    detailFile.close();
+
+    for (auto &record : donorRecords)
+    {
+        stringstream ss(record);
+        string temp;
+        getline(ss, temp, ',');
+        if (stoi(temp) == d.getId())
+        {
+            stringstream updatedRecord;
+            updatedRecord << temp << "," << d.getName() << "," << d.getBloodGroup() << "," << d.getAge() << "," << d.getZip() << "," << d.getContact() << "," << currentTime;
+            record = updatedRecord.str();
+        }
+    }
+
+    ofstream donorOutFile("CSV_Files/donor_info.csv", ios::trunc);
+    for (const auto &record : donorRecords)
+        donorOutFile << record << "\n";
+    donorOutFile.close();
+
+    cout << "Successfully added " << amount << " bags to " << d.getBloodGroup() << " blood group.\n";
+}
 void Hospital::addBlood(int donorId)
 {
     ifstream donorFile("CSV_Files/donor_info.csv");
@@ -208,6 +274,7 @@ void Hospital::addBlood(int donorId)
         cout << "Donor " << donorName << " (Blood Group: " << bloodGroup << ") found.\n";
         cout << "Contact: " << contact << " Zip: " << zip << "\n";
     }
+    Donor d(donorId,donorName,bloodGroup,stoi(age),stoi(zip),contact);
 
     time_t currentTime = time(0);
     if (lastDonationTime != 0 && (currentTime - lastDonationTime) < 120)
@@ -238,67 +305,9 @@ void Hospital::addBlood(int donorId)
         return;
     }
 
-    ifstream file("CSV_Files/blood_inventory.csv");
-    if (!file.is_open())
-    {
-        cerr << "Error: Could not open CSV_Files/blood_inventory.csv\n";
-        return;
-    }
-
-    vector<pair<string, int>> inventory;
-    bool found = false;
-    string bg;
-    int amt;
-    while (getline(file, line))
-    {
-        stringstream ss(line);
-        getline(ss, bg, ',');
-        getline(ss, line, ',');
-        amt = stoi(line);
-        if (normalizeBloodGroup(bg) == bloodGroup)
-        {
-            amt += amount;
-            found = true;
-        }
-        inventory.push_back({bg, amt});
-    }
-    file.close();
-
-    if (!found)
-    {
-        cerr << "Error: Blood group not found in inventory.\n";
-        return;
-    }
-
-    ofstream outFile("CSV_Files/blood_inventory.csv");
-    for (const auto &entry : inventory)
-        outFile << entry.first << "," << entry.second << "\n";
-    outFile.close();
-
-    ofstream detailFile("CSV_Files/detailed_blood_inventory.csv", ios::app);
-    for (int i = 0; i < amount; i++)
-        detailFile << bloodGroup << "," << currentTime + i << "\n";
-    detailFile.close();
-
-    for (auto &record : donorRecords)
-    {
-        stringstream ss(record);
-        string temp;
-        getline(ss, temp, ',');
-        if (stoi(temp) == donorId)
-        {
-            stringstream updatedRecord;
-            updatedRecord << temp << "," << donorName << "," << bloodGroup << "," << age << "," << zip << "," << contact << "," << currentTime;
-            record = updatedRecord.str();
-        }
-    }
-
-    ofstream donorOutFile("CSV_Files/donor_info.csv", ios::trunc);
-    for (const auto &record : donorRecords)
-        donorOutFile << record << "\n";
-    donorOutFile.close();
-
-    cout << "Successfully added " << amount << " bags to " << bloodGroup << " blood group.\n";
+   
+    write_to_inventory(amount,bloodGroup);
+    write_details(amount,d,currentTime,donorRecords);
 }
 
 unordered_map<string, int> Hospital::checkExpiry(int minutes)

@@ -18,6 +18,8 @@ public:
     // Default constructor
     Donor();
 
+    Donor(int a, string n, string s, int b, int z,string c);
+
     // Input donor information
     void inputDonor();
 
@@ -38,6 +40,8 @@ public:
     int getZip() const;
 
     string getContact() const; 
+    
+    int getId() const;
 };
 
 #endif // DONOR_H
