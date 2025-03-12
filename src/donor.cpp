@@ -10,6 +10,7 @@
 
 using namespace std;
 
+int population=100;
 Donor::Donor()
 {
     id = 0;
@@ -19,7 +20,7 @@ Donor::Donor()
     zip = 0;
     contact = "";
 }
-Donor::Donor(int a, string n, string s, int b, int z,string c):id(a),name(s),bloodGroup(s),age(b),zip(z),contact(c){}
+Donor::Donor(int a, string n, string s, int b, int z,string c):id(a),name(n),bloodGroup(s),age(b),zip(z),contact(c){}
 
 string normalizeBloodGroup2(string bg)
 {
@@ -192,4 +193,105 @@ string Donor::getContact() const
 }
 int Donor::getId() const{
     return id;
+}
+bool Donor::login(string don_name, string num) {
+    ifstream file("CSV_Files/donor_info.csv");
+    if (!file.is_open()) {
+        cerr << "Error: Unable to open user data file!" << endl;
+        return false;
+    }
+
+    string line,id,name,bg,age,zip,contact,timestamp;
+    
+    // Read the file line by line
+    while (getline(file, line)) {
+        stringstream ss(line);
+        getline(ss, id, ',');
+        getline(ss, name, ',');
+        getline(ss, bg, ',');
+        getline(ss, age, ',');
+        getline(ss, zip, ',');
+        getline(ss, contact, ',');
+        if (getline(ss, timestamp, ',')) {
+            // Timestamp exists
+        } else {
+            timestamp = "";  // No timestamp present
+        }
+
+        if (don_name==name && num==contact) {
+            time_t currentTime = time(0);
+            cout<<"Donor Info: "<<endl;
+            cout <<"ID: "<< id << "\n" << "Name: "<< name << "\n" <<"Blood Group: " <<bg << "\n" <<"Age: " <<age << "\n" <<"Zip Code: " <<zip << "\n" << "Contact Number: "<<contact << endl;
+            if (!timestamp.empty()) {
+                time_t lastDonation = stol(timestamp);
+                int secondsAgo = currentTime - lastDonation;
+                int canDonateIn = 120 - (secondsAgo );
+    
+                cout << "Last Blood donated "<<secondsAgo << " seconds ago\n";
+                if (canDonateIn > 0) {
+                    cout <<"Can Donate Blood Again In "<< canDonateIn << " seconds";
+                } else {
+                    cout << "Eligible to Donate Now";
+                }
+            } 
+            else {
+                cout << "Never Donated\nEligible to Donate Now";
+            }
+    
+            cout << endl;
+            file.close();
+            return true; 
+        } 
+    }
+
+    file.close();
+    return false;  
+}
+void Donor:: showStatistics(){
+    ifstream donorFile("CSV_Files/donor_info.csv");
+    if (!donorFile.is_open()) {
+        cerr << "Error: Could not open donor_info.csv\n";
+        return;
+    }
+
+    map<char, int> areaCounts = {{'A', 0}, {'B', 0}, {'C', 0}, {'D', 0}, {'E', 0}};
+    
+    string line;
+    while (getline(donorFile, line)) {
+        stringstream ss(line);
+        string temp;
+        int zipCode;
+
+        // Skip donor ID, Name, BloodGroup, Age
+        for (int i = 0; i < 4; i++) 
+            getline(ss, temp, ',');
+
+        // Extract ZIP code
+        getline(ss, temp, ',');
+        zipCode = stoi(temp);
+
+        // Categorize ZIP codes into areas
+        char area;
+        if (zipCode >= 1 && zipCode <= 2000)
+            area = 'A';
+        else if (zipCode >= 2001 && zipCode <= 4000)
+            area = 'B';
+        else if (zipCode >= 4001 && zipCode <= 6000)
+            area = 'C';
+        else if (zipCode >= 6001 && zipCode <= 8000)
+            area = 'D';
+        else
+            area = 'E';
+
+        areaCounts[area]++;
+    }
+    donorFile.close();
+
+    // Display statistics
+    cout << "=== Donor Statistics by Area ===\n";
+    cout << (static_cast<double>(areaCounts['A'])/population)*100 << "% of total population of Area A(ZIP 1-2000) are donors\n";
+    cout << (static_cast<double>(areaCounts['B'])/population)*100 << "% of total population of Area B(ZIP 2001-4000) are donors\n";
+    cout <<(static_cast<double>(areaCounts['C'])/population)*100 << "% of total population of Area C(ZIP 4001-6000) are donors\n";
+    cout << (static_cast<double>(areaCounts['D'])/population)*100 << "% of total population of Area D(ZIP 6001-8000) are donors\n";
+    cout <<(static_cast<double>(areaCounts['E'])/population)*100 << "% of total population of Area E(ZIP 8001-9999) are donors\n";
 }
