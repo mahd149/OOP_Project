@@ -21,8 +21,10 @@ bool Bloodtest::initial_test(){
     bool infectionScreening = rand() % 10; 
     bool hemoglobinLevel = rand() % 10;    
 
-    if (bloodTyping) 
+    if (bloodTyping){
         cout << "Blood Typing (ABO & Rh): Passed\n";
+    }
+
     else{
         cout << "Blood Typing (ABO & Rh): Failed\n";
         cout << "**Blood is NOT safe for storage!**\n";

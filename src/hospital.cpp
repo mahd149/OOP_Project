@@ -84,34 +84,45 @@ void Hospital::addDonor(Donor &donor)
 }
 void Hospital::write_to_inventory(int amount, string  bloodGroup){
     ifstream file("CSV_Files/blood_inventory.csv");
-    if (!file.is_open())
-    {
+    if (!file.is_open()) {
         cerr << "Error: Could not open CSV_Files/blood_inventory.csv\n";
         return;
     }
 
     vector<pair<string, int>> inventory;
     bool found = false;
-    string bg;
-    string line;
+    string line, bg, amtStr;
     int amt;
-    while (getline(file, line))
-    {
+
+    while (getline(file, line)) {
         stringstream ss(line);
-        getline(ss, bg, ',');
-        getline(ss, line, ',');
-        amt = stoi(line);
-        if (normalizeBloodGroup(bg) == bloodGroup)
-        {
+
+        if (!getline(ss, bg, ',')) continue; // Read blood group (skip empty lines)
+        if (!getline(ss, amtStr, ',')) continue; // Read amount as string (skip invalid lines)
+
+        // Handle empty or invalid numeric fields
+        if (amtStr.empty()) {
+            cerr << "Warning: Missing blood amount in line: " << line << endl;
+            continue;
+        }
+
+        try {
+            amt = stoi(amtStr); // Convert to integer
+        } catch (const std::exception &e) {
+            cerr << "Error: Invalid number in line: " << line << " -> " << amtStr << endl;
+            continue; // Skip invalid entries
+        }
+
+        if (normalizeBloodGroup(bg) == bloodGroup) {
             amt += amount;
             found = true;
         }
+
         inventory.push_back({bg, amt});
     }
     file.close();
 
-    if (!found)
-    {
+    if (!found) {
         cerr << "Error: Blood group not found in inventory.\n";
         return;
     }
@@ -187,7 +198,6 @@ void Hospital::addBlood(int donorId)
             getline(ss, temp, ',');
             if (!temp.empty())
                 lastDonationTime = stol(temp);
-
             bloodGroup = normalizeBloodGroup(bloodGroup);
         }
         donorRecords.push_back(line);

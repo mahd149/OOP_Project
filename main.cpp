@@ -15,7 +15,7 @@ int main()
     while (true)
     {
         cout << "\nMenu:\n";
-        cout << "1. Search for Blood\n2. Admin Login\n3. Moderator Login\n4. Hospital Login\n0. Exit\n";
+        cout << "1. Search for Blood\n2. Admin Login\n3. Moderator Login\n4. Hospital Login\n5. Donor Login\n6.Show Statistics\n0. Exit\n";
 
         int x;
         cout << "Enter option: ";
@@ -287,6 +287,29 @@ int main()
 
             delete h;
             break;
+        }
+        case 5:
+        {
+            string name,contact;
+            cout<<"Enter Donor's Name: ";
+            cin.ignore();
+            getline(cin,name);
+            cout<<"Enter Contact Number: ";
+            cin>>contact;
+            Donor* d= new Donor();
+            if(d->login(name,contact)){
+                continue;
+            }
+            else{
+                cout<<"Login Failed! Invalid Credentials"<<endl;
+            }
+            delete d;
+            break;
+        }
+        case 6:
+        {
+            Donor* d=new Donor();
+            d->showStatistics();
         }
         case 0:
             cout << "Exiting...\n";

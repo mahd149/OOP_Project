@@ -2,6 +2,7 @@
 #define DONOR_H
 
 #include <string>
+#include <map>
 using namespace std;
 
 class Donor
@@ -42,6 +43,11 @@ public:
     string getContact() const; 
     
     int getId() const;
+
+    bool login(string name, string num);
+
+    void showStatistics();
 };
+
 
 #endif // DONOR_H
