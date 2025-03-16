@@ -34,12 +34,12 @@ void MainMenu::drawMenu(bool isMainMenu)
 {
     if (isMainMenu) {
         DrawTexture(bgImage, 0, 0, WHITE);  // Only draw background in MAIN_MENU screen
-        DrawText("Blood Bank Management System", 270, 150, 20, BLACK);
+       // DrawText("Blood Bank Management System", 260, 150, 23, BLACK);
 
         for (int i = 0; i < 5; i++)
         {
             Color btnColor = hovered[i] ? (Color){100, 100, 255, 255} : (Color){50, 50, 200, 255}; // if hovered light blue, otherwise default
-            DrawRectangleGradientV(buttons[i].x, buttons[i].y, buttons[i].width, buttons[i].height, btnColor, BLUE);
+            DrawRectangleGradientV(buttons[i].x, buttons[i].y, buttons[i].width, buttons[i].height, btnColor, RED);
             DrawRectangleLinesEx(buttons[i], 3, WHITE); // border
             DrawText(labels[i], buttons[i].x + 20, buttons[i].y + 15, 20, WHITE);
         }
