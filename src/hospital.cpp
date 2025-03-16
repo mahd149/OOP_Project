@@ -439,7 +439,9 @@ void Hospital::write_to_inventory(int amount, string  bloodGroup){
     for (const auto &entry : inventory)
         outFile << entry.first << "," << entry.second << "\n";
     outFile.close();
-    cout << "Successfully removed " << amount << " bags from " << bloodGroup << " blood group.\n";
+    if(amount<0)
+        cout << "Successfully removed " << amount << " bags from " << bloodGroup << " blood group.\n";
+    // else 
 
     
 }

@@ -24,13 +24,13 @@ bool Bloodtest::initial_test(){
 
     if (bloodTyping){
         cout << "Blood Typing (ABO & Rh): ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Passed\n";
     }
 
     else{
         cout << "Blood Typing (ABO & Rh): ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Failed\n";
         cout << "**Blood is NOT safe for storage!**\n";
         return false;
@@ -39,14 +39,14 @@ bool Bloodtest::initial_test(){
 
     if (infectionScreening){
         cout << "Infection Screening: ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Passed\n";
 
     }
     
     else {
         cout << "Infection Screening:  ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Failed\n";
         cout << "**Blood is NOT safe for storage!**\n";
         return false;
@@ -55,12 +55,12 @@ bool Bloodtest::initial_test(){
 
     if (hemoglobinLevel) {
         cout << "Hemoglobin Level: ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Passed\n";
     }
     else{
         cout << "Hemoglobin Level: ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Failed\n";
         cout << "**Blood is NOT safe for storage!**\n";
         return false;

@@ -35,7 +35,7 @@ class Hospital: public User{
         void processBloodRequest(Bloodtest *request);
         void write_to_inventory(int amount,string bloodgroup);
         void write_details(int amount,Donor d,time_t currentTime,vector<string>donorRecords);
-        string normalizeBloodGroup(string bg);
+        static string normalizeBloodGroup(string bg);
         ~Hospital(){}
 
 };

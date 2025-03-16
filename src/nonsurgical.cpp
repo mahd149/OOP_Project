@@ -19,13 +19,13 @@ void NonSurgical::performTests() {
 
     if (bloodTyping){
         cout << "Blood Typing (ABO & Rh): ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Passed\n";
     } 
 
     else {
         cout << "Blood Typing (ABO & Rh): ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Failed\n";
         cout << "**Test failed! Blood is NOT safe for non-surgical use.**\n";
         isApproved=false;
@@ -35,14 +35,14 @@ void NonSurgical::performTests() {
 
     if (iron) {
         cout << "Ferritin Test: ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Passed\n";
 
     }
         
     else {
         cout << "Ferritin Test: ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Failed\n";
         cout << "**Test failed! Blood is NOT safe for non-surgical use.**\n";
         isApproved=false;
@@ -53,13 +53,13 @@ void NonSurgical::performTests() {
 
     if (hemoglobinTest) {
         cout << "Hemoglobin Test: ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Passed\n";
     }
         
     else {
         cout << "Hemoglobin Test: ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Failed\n";
         cout << "**Test failed! Blood is NOT safe for non-surgical use.**\n";
         isApproved=false;

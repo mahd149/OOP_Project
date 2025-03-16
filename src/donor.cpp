@@ -22,16 +22,16 @@ Donor::Donor()
 }
 Donor::Donor(int a, string n, string s, int b, int z,string c):id(a),name(n),bloodGroup(s),age(b),zip(z),contact(c){}
 
-string normalizeBloodGroup2(string bg)
-{
-    transform(bg.begin(), bg.end(), bg.begin(), ::toupper);
-    if (bg == "A+" || bg == "A-" || bg == "B+" || bg == "B-" ||
-        bg == "AB+" || bg == "AB-" || bg == "O+" || bg == "O-")
-    {
-        return bg;
-    }
-    return "";
-}
+// string normalizeBloodGroup2(string bg)
+// {
+//     transform(bg.begin(), bg.end(), bg.begin(), ::toupper);
+//     if (bg == "A+" || bg == "A-" || bg == "B+" || bg == "B-" ||
+//         bg == "AB+" || bg == "AB-" || bg == "O+" || bg == "O-")
+//     {
+//         return bg;
+//     }
+//     return "";
+// }
 
 void Donor::inputDonor()
 {
@@ -43,7 +43,8 @@ void Donor::inputDonor()
     {
         cout << "Enter Blood Group: ";
         cin >> bloodGroup;
-        bloodGroup = normalizeBloodGroup2(bloodGroup);
+        // bloodGroup = normalizeBloodGroup2(bloodGroup);
+        bloodGroup = Hospital::normalizeBloodGroup(bloodGroup);
         if (!bloodGroup.empty())
             break;
         cout << "Invalid blood group entered. Please enter a valid blood group (A+, A-, B+, B-, AB+, AB-, O+, O-).\n";

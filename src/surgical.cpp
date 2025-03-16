@@ -19,13 +19,13 @@ void Surgical::performTests() {
     bool coagulationTest = rand() % 10;   
     if (bloodTyping){
         cout << "Blood Typing (ABO & Rh): ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Passed\n";
     } 
         
     else {
         cout << "Blood Typing (ABO & Rh): ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Failed\n";
         cout << "**Test failed! Blood is NOT safe for surgical use**\n";
         isApproved=false;
@@ -35,13 +35,13 @@ void Surgical::performTests() {
 
     if (crossmatch){
         cout << "Crossmatching: ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Passed\n";
     }
         
     else{
         cout << "Crossmatching: ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Failed\n";
         cout << "**Test failed! Blood is NOT safe for surgical use**\n";
         isApproved=false;
@@ -51,14 +51,14 @@ void Surgical::performTests() {
 
     if (platelet) {
         cout << "Platelet Count: ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Passed\n";
 
     }
         
     else {
         cout << "Platelet Count: ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Failed\n";
         cout << "**Test failed! Blood is NOT safe for surgical use**\n";
         isApproved=false;
@@ -69,14 +69,14 @@ void Surgical::performTests() {
 
     if (coagulationTest){
         cout << "Coagulation Test: ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Passed\n";
 
     } 
         
     else {
         cout << "Coagulation Test: ";
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::seconds(3));
         cout<<"Failed\n";
         cout << "**Test failed! Blood is NOT safe for surgical use**\n";
         isApproved=false;

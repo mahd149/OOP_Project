@@ -5,7 +5,7 @@
 #include <thread>
 #include <chrono>
 
-
+//abstract class
 using namespace std;
 
 class Bloodtest {
