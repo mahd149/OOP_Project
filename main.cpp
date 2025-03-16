@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -15,7 +16,7 @@ int main()
     while (true)
     {
         cout << "\nMenu:\n";
-        cout << "1. Search for Blood\n2. Admin Login\n3. Moderator Login\n4. Hospital Login\n5. Donor Login\n6.Show Statistics\n0. Exit\n";
+        cout << "1. Search for Blood\n2. Admin Login\n3. Moderator Login\n4. Hospital Login\n5. Donor Login\n6. Show Statistics\n0. Exit\n";
 
         int x;
         cout << "Enter option: ";
@@ -240,9 +241,17 @@ int main()
                         int amount;
                         int typeChoice;
                         bool isSurgical;
-
-                        cout << "Enter Blood Group: ";
-                        cin >> bloodGroup;
+                        
+                        while(true){
+                            cout << "Enter Blood Group: ";
+                            cin >> bloodGroup;
+                            bloodGroup = h->normalizeBloodGroup(bloodGroup);
+                            if (!bloodGroup.empty())
+                                break;
+                            cout << "Invalid blood group. Please enter (A+, A-, B+, B-, AB+, AB-, O+, O-).\n";
+                        }
+                        
+                        
                         cout << "Enter Amount: ";
                         cin >> amount;
 

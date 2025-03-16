@@ -65,7 +65,7 @@ void Hospital::readBloodInventory()
     cout << "-----------------\n";
     file.close();
 }
-string normalizeBloodGroup(string bg)
+string Hospital:: normalizeBloodGroup(string bg)
 {
     transform(bg.begin(), bg.end(), bg.begin(), ::toupper);
     if (bg == "A+" || bg == "A-" || bg == "B+" || bg == "B-" ||
@@ -81,58 +81,6 @@ void Hospital::addDonor(Donor &donor)
     // Save the donor information to the donor_info.csv file
     string filename = "CSV_Files/donor_info.csv";
     donor.saveToFile(filename);
-}
-void Hospital::write_to_inventory(int amount, string  bloodGroup){
-    ifstream file("CSV_Files/blood_inventory.csv");
-    if (!file.is_open()) {
-        cerr << "Error: Could not open CSV_Files/blood_inventory.csv\n";
-        return;
-    }
-
-    vector<pair<string, int>> inventory;
-    bool found = false;
-    string line, bg, amtStr;
-    int amt;
-
-    while (getline(file, line)) {
-        stringstream ss(line);
-
-        if (!getline(ss, bg, ',')) continue; // Read blood group (skip empty lines)
-        if (!getline(ss, amtStr, ',')) continue; // Read amount as string (skip invalid lines)
-
-        // Handle empty or invalid numeric fields
-        if (amtStr.empty()) {
-            cerr << "Warning: Missing blood amount in line: " << line << endl;
-            continue;
-        }
-
-        try {
-            amt = stoi(amtStr); // Convert to integer
-        } catch (const std::exception &e) {
-            cerr << "Error: Invalid number in line: " << line << " -> " << amtStr << endl;
-            continue; // Skip invalid entries
-        }
-
-        if (normalizeBloodGroup(bg) == bloodGroup) {
-            amt += amount;
-            found = true;
-        }
-
-        inventory.push_back({bg, amt});
-    }
-    file.close();
-
-    if (!found) {
-        cerr << "Error: Blood group not found in inventory.\n";
-        return;
-    }
-
-    ofstream outFile("CSV_Files/blood_inventory.csv");
-    for (const auto &entry : inventory)
-        outFile << entry.first << "," << entry.second << "\n";
-    outFile.close();
-
-    
 }
 void  Hospital::write_details(int amount,Donor d,time_t currentTime,vector<string>donorRecords){
     ofstream detailFile("CSV_Files/detailed_blood_inventory.csv", ios::app);
@@ -363,122 +311,7 @@ unordered_map<string, int> Hospital::checkExpiry(int minutes)
     return expiredBloodCount;
 }
 
-void Hospital::removeBlood(const string &bloodGroup, int amount)
-{
-    ifstream file("CSV_Files/blood_inventory.csv");
-    if (!file.is_open())
-    {
-        cerr << "Error: Could not open CSV_Files/blood_inventory.csv\n";
-        return;
-    }
 
-    vector<pair<string, int>> inventory;
-    string line, bg;
-    int amt;
-    bool found = false;
-
-    while (getline(file, line))
-    {
-        stringstream ss(line);
-        getline(ss, bg, ',');
-
-        getline(ss, line, ',');
-        amt = (line.empty()) ? 0 : stoi(line);
-
-        if (normalizeBloodGroup(bg) == normalizeBloodGroup(bloodGroup))
-        {
-            if (amt < amount)
-            {
-                cerr << "Error: Not enough blood bags available. Current: " << amt << "\n";
-                file.close();
-                return;
-            }
-            amt -= amount;
-            found = true;
-        }
-
-        inventory.push_back({bg, amt});
-    }
-    file.close();
-
-    if (!found)
-    {
-        cerr << "Error: Blood group not found.\n";
-        return;
-    }
-
-    // Write back the updated inventory
-    ofstream outFile("CSV_Files/blood_inventory.csv");
-    if (!outFile.is_open())
-    {
-        cerr << "Error: Could not open CSV_Files/blood_inventory.csv for writing.\n";
-        return;
-    }
-
-    for (const auto &entry : inventory)
-    {
-        outFile << entry.first << "," << entry.second << "\n";
-    }
-    outFile.close();
-
-    // --- Remove oldest `amount` entries from detailed_blood_inventory.csv ---
-    ifstream detailFile("CSV_Files/detailed_blood_inventory.csv");
-    if (!detailFile.is_open())
-    {
-        cerr << "Error: Could not open CSV_Files/detailed_blood_inventory.csv\n";
-        return;
-    }
-
-    vector<pair<string, time_t>> detailedRecords;
-    vector<pair<string, time_t>> filteredRecords;
-    int removedCount = 0;
-
-    while (getline(detailFile, line))
-    {
-        stringstream ss(line);
-        string bgroup;
-        time_t timestamp;
-
-        getline(ss, bgroup, ',');
-        ss >> timestamp;
-
-        detailedRecords.push_back({bgroup, timestamp});
-    }
-    detailFile.close();
-
-    // Sort records by timestamp (oldest first)
-    sort(detailedRecords.begin(), detailedRecords.end(), [](const auto &a, const auto &b)
-         { return a.second < b.second; });
-
-    // Remove oldest `amount` entries for the given blood group
-    for (const auto &entry : detailedRecords)
-    {
-        if (removedCount < amount && normalizeBloodGroup(entry.first) == normalizeBloodGroup(bloodGroup))
-        {
-            removedCount++;
-        }
-        else
-        {
-            filteredRecords.push_back(entry);
-        }
-    }
-
-    // Write back remaining entries
-    ofstream newDetailFile("CSV_Files/detailed_blood_inventory.csv");
-    if (!newDetailFile.is_open())
-    {
-        cerr << "Error: Could not open CSV_Files/detailed_blood_inventory.csv for writing.\n";
-        return;
-    }
-
-    for (const auto &entry : filteredRecords)
-    {
-        newDetailFile << entry.first << "," << entry.second << "\n";
-    }
-    newDetailFile.close();
-
-    cout << "Successfully removed " << amount << " bags from " << bloodGroup << " blood group.\n";
-}
 
 string Hospital::trim(const string &str)
 {
@@ -552,6 +385,124 @@ void Hospital::searchBlood()
 
     file.close();
 }
+void Hospital::write_to_inventory(int amount, string  bloodGroup){
+    ifstream file("CSV_Files/blood_inventory.csv");
+    if (!file.is_open()) {
+        cerr << "Error: Could not open CSV_Files/blood_inventory.csv\n";
+        return;
+    }
+
+    vector<pair<string, int>> inventory;
+    bool found = false;
+    string line, bg, amtStr;
+    int amt;
+    //Reading from the file
+    while (getline(file, line)) {
+        stringstream ss(line);
+
+        if (!getline(ss, bg, ',')) continue; 
+        if (!getline(ss, amtStr, ',')) continue;
+
+        // Handle empty or invalid numeric fields
+        if (amtStr.empty()) {
+            cerr << "Warning: Missing blood amount in line: " << line << endl;
+            continue;
+        }
+        //Exception handling: If string cant be an integer
+        try {
+            amt = stoi(amtStr); 
+        } catch (exception &e) {
+            cerr << "Error: Invalid number in line: " << line << " -> " << amtStr << endl;
+            continue; 
+        }
+
+        if (normalizeBloodGroup(bg) == bloodGroup) {
+            if (amt + amount < 0) {
+                cerr << "Error: Insufficient blood in inventory for " << bloodGroup << ". Available: " << amt << ", Requested: " << abs(amount) << "\n";
+                file.close();
+                return;
+            }
+            amt += amount;
+            found = true;
+        }
+
+        inventory.push_back({bg, amt});
+    }
+    file.close();
+
+    if (!found) {
+        cerr << "Error: Blood group not found in inventory.\n";
+        return;
+    }
+    //Writing back to the inventory
+    ofstream outFile("CSV_Files/blood_inventory.csv");
+    for (const auto &entry : inventory)
+        outFile << entry.first << "," << entry.second << "\n";
+    outFile.close();
+    cout << "Successfully removed " << amount << " bags from " << bloodGroup << " blood group.\n";
+
+    
+}
+void Hospital::removeBlood(const string &bloodGroup, int amount)
+{
+    write_to_inventory(-amount,bloodGroup);
+    ifstream detailFile("CSV_Files/detailed_blood_inventory.csv");
+    if (!detailFile.is_open())
+    {
+        cerr << "Error: Could not open CSV_Files/detailed_blood_inventory.csv\n";
+        return;
+    }
+
+    vector<pair<string, time_t>> detailedRecords;
+    vector<pair<string, time_t>> filteredRecords;
+    string line;
+    int removedCount = 0;
+
+    while (getline(detailFile, line))
+    {
+        stringstream ss(line);
+        string bgroup;
+        time_t timestamp;
+
+        getline(ss, bgroup, ',');
+        ss >> timestamp;
+
+        detailedRecords.push_back({bgroup, timestamp});
+    }
+    detailFile.close();
+
+    // Sort records by timestamp (oldest first)
+    sort(detailedRecords.begin(), detailedRecords.end(), [](const auto &a, const auto &b)
+         { return a.second < b.second; });
+
+    // Remove oldest  entries for the given blood group
+    for (const auto &entry : detailedRecords)
+    {
+        if (removedCount < amount && normalizeBloodGroup(entry.first) == normalizeBloodGroup(bloodGroup))
+        {
+            removedCount++;
+        }
+        else
+        {
+            filteredRecords.push_back(entry);
+        }
+    }
+
+    // Write back remaining entries
+    ofstream newDetailFile("CSV_Files/detailed_blood_inventory.csv");
+    if (!newDetailFile.is_open())
+    {
+        cerr << "Error: Could not open CSV_Files/detailed_blood_inventory.csv for writing.\n";
+        return;
+    }
+
+    for (const auto &entry : filteredRecords)
+    {
+        newDetailFile << entry.first << "," << entry.second << "\n";
+    }
+    newDetailFile.close();
+
+}
 void Hospital::processBloodRequest(Bloodtest *request)
 {
     cout << "\n[Processing Request] Checking availability for " << request->getQuantity()
@@ -572,7 +523,11 @@ void Hospital::processBloodRequest(Bloodtest *request)
 void Hospital::requestBlood(const string &bloodGroup, int amount, bool isSurgical)
 {
     cout << "\n[Blood Request] Requesting " << amount << " units of " << bloodGroup;
-    cout << (isSurgical ? " for **Surgical use**.\n" : " for **Non-Surgical use**.\n");
+    if (isSurgical) {
+        cout << " for **Surgical use**.\n";
+    } else {
+        cout << " for **Non-Surgical use**.\n";
+    }
 
     Bloodtest *request;
 

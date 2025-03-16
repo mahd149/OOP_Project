@@ -17,32 +17,72 @@ void Surgical::performTests() {
     bool crossmatch = rand() % 10;        
     bool platelet = rand() % 10; 
     bool coagulationTest = rand() % 10;   
-    if (bloodTyping) 
-        cout << "Blood Typing (ABO & Rh): Passed" << endl;
-    else 
-        cout << "Blood Typing (ABO & Rh): Failed" << endl;
+    if (bloodTyping){
+        cout << "Blood Typing (ABO & Rh): ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Passed\n";
+    } 
+        
+    else {
+        cout << "Blood Typing (ABO & Rh): ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Failed\n";
+        cout << "**Test failed! Blood is NOT safe for surgical use**\n";
+        isApproved=false;
+        return;
+    }
+        
 
-    if (crossmatch) 
-        cout << "Crossmatching: Passed" << endl;
-    else 
-        cout << "Crossmatching: Failed" << endl;
+    if (crossmatch){
+        cout << "Crossmatching: ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Passed\n";
+    }
+        
+    else{
+        cout << "Crossmatching: ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Failed\n";
+        cout << "**Test failed! Blood is NOT safe for surgical use**\n";
+        isApproved=false;
+        return;
+    } 
+        
 
-    if (platelet) 
-        cout << "Platelet Count: Passed" << endl;
-    else 
-        cout << "Platelet Count: Failed" << endl;
+    if (platelet) {
+        cout << "Platelet Count: ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Passed\n";
 
-    if (coagulationTest) 
-        cout << "Coagulation Test: Passed" << endl;
-    else 
-        cout << "Coagulation Test: Failed" << endl;
+    }
+        
+    else {
+        cout << "Platelet Count: ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Failed\n";
+        cout << "**Test failed! Blood is NOT safe for surgical use**\n";
+        isApproved=false;
+        return;
 
+    }
+        
 
-    if (bloodTyping && crossmatch && platelet && coagulationTest) {
+    if (coagulationTest){
+        cout << "Coagulation Test: ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Passed\n";
+
+    } 
+        
+    else {
+        cout << "Coagulation Test: ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Failed\n";
+        cout << "**Test failed! Blood is NOT safe for surgical use**\n";
+        isApproved=false;
+        return;
+    }
         cout << "**All tests passed! Blood can be used for surgery.**\n";
         isApproved=true;
-    } else {
-        cout << "**Test failed! Blood is NOT safe for surgical use.**\n";
-        isApproved=false;
-    }
+
 }

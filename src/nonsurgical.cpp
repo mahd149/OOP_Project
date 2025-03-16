@@ -17,26 +17,56 @@ void NonSurgical::performTests() {
     bool iron = rand() % 10; 
     bool hemoglobinTest = rand() % 10;    
 
-    if (bloodTyping) 
-        cout << "Blood Typing (ABO & Rh): Passed" << endl;
-    else 
-        cout << "Blood Typing (ABO & Rh): Failed" << endl;
+    if (bloodTyping){
+        cout << "Blood Typing (ABO & Rh): ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Passed\n";
+    } 
 
-    if (iron) 
-        cout << "Ferritin Test: Passed" << endl;
-    else 
-        cout << "Ferritin Test: Failed" << endl;
-
-    if (hemoglobinTest) 
-        cout << "Hemoglobin Test: Passed" << endl;
-    else 
-        cout << "Hemoglobin Test: Failed" << endl;
-
-    if (bloodTyping && iron && hemoglobinTest) {
-        cout << "**All tests passed! Blood is safe for non-surgical use.**\n";
-        isApproved=true;
-    } else {
+    else {
+        cout << "Blood Typing (ABO & Rh): ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Failed\n";
         cout << "**Test failed! Blood is NOT safe for non-surgical use.**\n";
         isApproved=false;
+        return;
     }
+        
+
+    if (iron) {
+        cout << "Ferritin Test: ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Passed\n";
+
+    }
+        
+    else {
+        cout << "Ferritin Test: ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Failed\n";
+        cout << "**Test failed! Blood is NOT safe for non-surgical use.**\n";
+        isApproved=false;
+        return;
+
+    }
+        
+
+    if (hemoglobinTest) {
+        cout << "Hemoglobin Test: ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Passed\n";
+    }
+        
+    else {
+        cout << "Hemoglobin Test: ";
+        this_thread::sleep_for(chrono::seconds(1));
+        cout<<"Failed\n";
+        cout << "**Test failed! Blood is NOT safe for non-surgical use.**\n";
+        isApproved=false;
+        return;
+    }     
+        cout << "**All tests passed! Blood is safe for non-surgical use.**\n";
+        isApproved=true;
+    
+
 }
