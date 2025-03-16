@@ -319,6 +319,7 @@ int main()
         {
             Donor* d=new Donor();
             d->showStatistics();
+            break;
         }
         case 0:
             cout << "Exiting...\n";

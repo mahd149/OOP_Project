@@ -289,9 +289,9 @@ void Donor:: showStatistics(){
 
     // Display statistics
     cout << "=== Donor Statistics by Area ===\n";
-    cout << (static_cast<double>(areaCounts['A'])/population)*100 << "% of total population of Area A(ZIP 1-2000) are donors\n";
-    cout << (static_cast<double>(areaCounts['B'])/population)*100 << "% of total population of Area B(ZIP 2001-4000) are donors\n";
-    cout <<(static_cast<double>(areaCounts['C'])/population)*100 << "% of total population of Area C(ZIP 4001-6000) are donors\n";
-    cout << (static_cast<double>(areaCounts['D'])/population)*100 << "% of total population of Area D(ZIP 6001-8000) are donors\n";
-    cout <<(static_cast<double>(areaCounts['E'])/population)*100 << "% of total population of Area E(ZIP 8001-9999) are donors\n";
+    cout << (static_cast<double>(areaCounts['A'])/population)*100 << "% of people from Area A(ZIP 0001-2000) are donors\n";
+    cout << (static_cast<double>(areaCounts['B'])/population)*100 << "% of people from Area B(ZIP 2001-4000) are donors\n";
+    cout <<(static_cast<double>(areaCounts['C'])/population)*100 << "% of people from Area C(ZIP 4001-6000) are donors\n";
+    cout << (static_cast<double>(areaCounts['D'])/population)*100 << "% of people from Area D(ZIP 6001-8000) are donors\n";
+    cout <<(static_cast<double>(areaCounts['E'])/population)*100 << "% of people from Area E(ZIP 8001-9999) are donors\n";
 }
